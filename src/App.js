@@ -21,7 +21,6 @@ const App = props => {
   const { theme } = useThemeModel()
   const history = useHistory()
 
-  console.log( history )
 
   // 文章Data
   const { data } = useDataModel()
