@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import useThemeModel from '../../models/useThemeModel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
@@ -78,6 +78,7 @@ const StyledAppSwitch = styled.div`
   align-items: center;
   font-size: 14px;
   color: ${({ theme }) => theme.color.caption};
+  user-select: none;
 
   .item {
     padding: 10px;
@@ -91,4 +92,4 @@ const StyledAppSwitch = styled.div`
   }
 `
 
-export default AppSwitch
+export default memo(AppSwitch)

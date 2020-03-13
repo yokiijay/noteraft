@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cover } from 'polished'
 import useThemeModel from '../../models/useThemeModel'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 
 const MenuBtnVariants = {
   hoverStyle: {
@@ -82,7 +82,7 @@ const MenuBtn = ({initial=true, onSwitch}) => {
 const StyledRipple = styled(motion.div)`
   ${cover()};
   border-radius: 50%;
-  background: ${({ theme }) => theme.color.shadow};
+  background: ${({ theme }) => theme.color.disabled};
 `
 
 const StyledMenuBtn = styled(motion.div)`
@@ -96,6 +96,7 @@ const StyledMenuBtn = styled(motion.div)`
   border-radius: 20px;
   cursor: pointer;
   opacity: 0.6;
+  user-select: none;
 `
 
-export default MenuBtn
+export default memo(MenuBtn)

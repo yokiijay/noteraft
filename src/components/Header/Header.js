@@ -3,17 +3,20 @@ import React from 'react'
 import { jsx, css } from '@emotion/core'
 import useThemeModel from '../../models/useThemeModel'
 
-const Header = ({children}) => {
-  const {theme} = useThemeModel()
+const Header = ({ children }) => {
+  const { theme } = useThemeModel()
 
-  return(
-    <div css={css`
-      padding: 0 17px;
-      height: 68px;
-      border-bottom: 1px solid ${theme.color.divider};
-      display: flex;
-      align-items: center;
-    `}>
+  return (
+    <div
+      css={css`
+        padding: 0 17px;
+        height: 68px;
+        border-bottom: 1px solid ${theme.color.divider};
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      `}
+    >
       {children}
     </div>
   )

@@ -2,6 +2,7 @@
 import { jsx, css } from '@emotion/core'
 import { motion } from 'framer-motion'
 import useThemeModel from '../../models/useThemeModel'
+import { memo } from 'react'
 
 const CreateBtn = ({ children = '写文章', onTap, onClick }) => {
   const { theme } = useThemeModel()
@@ -17,11 +18,14 @@ const CreateBtn = ({ children = '写文章', onTap, onClick }) => {
         display: flex;
         justify-content: center;
         align-items: center;
+        user-select: none;
       `}
       whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
     >
       <motion.div
-        whileHover={{ scale: .94}}
+        whileHover={{ scale: 0.9 }}
+        whileTap={{ scale: 1.1 }}
         css={css`
           padding: 10px 28px;
         `}
@@ -32,4 +36,4 @@ const CreateBtn = ({ children = '写文章', onTap, onClick }) => {
   )
 }
 
-export default CreateBtn
+export default memo(CreateBtn)

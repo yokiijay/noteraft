@@ -3,6 +3,7 @@ import { jsx, css } from '@emotion/core'
 import { between } from 'polished'
 import useThemeModel from '../models/useThemeModel'
 import useZoomModel from '../models/useZoomModel'
+import { memo } from 'react'
 
 const Container = ({children}) => {
   // 主题状态
@@ -31,4 +32,4 @@ const Container = ({children}) => {
   )
 }
 
-export default Container
+export default memo(Container)
