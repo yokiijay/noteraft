@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/** @jsx jsx */
+import { jsx, css, Global } from '@emotion/core'
+import useThemeModel from './models/useThemeModel'
+import { normalize } from 'polished'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Container from './components/Container'
+import Header from './components/Header/Header'
+import MenuBtn from './components/Header/MenuBtn'
+import AppSwitch from './components/Header/AppSwitch'
+import CreateBtn from './components/Header/CreateBtn'
 
-function App() {
+/* -------------------------- App -------------------------- */
+
+const App = ({ color }) => {
+  const { theme } = useThemeModel()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <StyledApp theme={theme}>
+      <Router>
+
+        <Container>
+          <Header>
+            <MenuBtn initial={true} />
+            <AppSwitch initial={0} />
+            <CreateBtn onTap={()=>console.log( 'create' )}>写文章</CreateBtn>
+          </Header>
+        </Container>
+
+      </Router>
+    </StyledApp>
+  )
 }
 
-export default App;
+/* -------------------------- style for App -------------------------- */
+
+const StyledApp = ({ theme, children }) => {
+  return (
+    <div
+      css={css`
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        background: ${theme.mode === 'dark' ? '#111B1F' : theme.background.base};
+      `}
+    >
+      <Global
+        styles={css`
+          * {
+            box-sizing: border-box;
+          }
+          ${normalize()};
+        `}
+      />
+      {children}
+    </div>
+  )
+}
+
+export default App
