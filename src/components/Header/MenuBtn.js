@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import styled from '@emotion/styled'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cover } from 'polished'
@@ -33,21 +33,31 @@ const RippleVariants = {
   }
 }
 
-const MenuBtn = ({initial=true, onSwitch}) => {
+const iconBarVariants = {
+  initial: { x: '100%' },
+  animate: { x: '0' },
+  exit: { x: '100%' },
+}
+
+const iconArrowVariants = {
+  initial: { x: '-100%' },
+  animate: { x: '0' },
+  exit: { x: '-100%' },
+}
+
+const MenuBtn = ({ initial = true, onSwitch }) => {
   const { theme } = useThemeModel()
   const [onOff, setOnOff] = useState(initial)
   const [rippleCount, setRippleCount] = useState(0)
 
-  useEffect(()=>{
+  useEffect(() => {
     onSwitch && onSwitch(onOff)
   }, [onOff, onSwitch])
 
-  const switchOnOff = ()=>[
-    setOnOff(!onOff)
-  ]
+  const switchOnOff = () => [setOnOff(!onOff)]
 
-  const handleTap = ()=>{
-    setRippleCount(rippleCount+1)
+  const handleTap = () => {
+    setRippleCount(rippleCount + 1)
   }
 
   return (
@@ -68,13 +78,31 @@ const MenuBtn = ({initial=true, onSwitch}) => {
             exit='exit'
             transition={{
               ease: 'easeOut',
-              duration: .4
+              duration: 0.4
             }}
           />
         </AnimatePresence>
 
-        <FontAwesomeIcon icon={faBars} color='gray' />
+        {/* <FontAwesomeIcon icon={faBars} color='gray' /> */}
+        <MotionIcon
+          key={rippleCount}
+          variants={onOff ? iconBarVariants : iconArrowVariants}
+          icon={onOff ? faChevronLeft : faBars}
+        />
       </StyledMenuBtn>
+    </motion.div>
+  )
+}
+
+const MotionIcon = ({ icon, variants }) => {
+  return (
+    <motion.div
+      variants={variants}
+      initial='initial'
+      animate='animate'
+      exit='exit'
+    >
+      <FontAwesomeIcon icon={icon} color='gray' />
     </motion.div>
   )
 }
