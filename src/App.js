@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, memo } from 'react'
 /** @jsx jsx */
 import { jsx, css, Global } from '@emotion/core'
 import useThemeModel from './models/useThemeModel'
@@ -14,6 +14,7 @@ import SidebarItem from './components/Sidebar/SidebarItem'
 import useDataModel from './models/useDataModel'
 import { useHistory, Route, Switch } from 'react-router-dom'
 import NoPage from './components/NotFound/NoPage'
+import useShortKey from './lib/useShortKey'
 
 /* -------------------------- App -------------------------- */
 
@@ -21,17 +22,17 @@ const App = props => {
   const { theme } = useThemeModel()
   const history = useHistory()
 
-
   // 文章Data
-  const { data, setdata, deleteByIndex } = useDataModel()
+  const { data, deleteByIndex } = useDataModel()
 
   // 侧栏
   const [showSidebar, setShowSidebar] = useState(true)
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const handleMenuBtnSwitch = useCallback(onOff => {
-    setShowSidebar(onOff)
-  }, [])
+  // 侧栏快捷键
+  useShortKey('cmd', 'b', ()=>{
+    setShowSidebar(!showSidebar)
+  })
 
   // app catagory 切换
   const [catagory, setCatagory] = useState(0)
@@ -63,7 +64,8 @@ const App = props => {
       <Container>
 
         <Header>
-          <MenuBtn initial={true} onSwitch={handleMenuBtnSwitch} />
+          {/* <MenuBtn initial={true} onSwitch={handleMenuBtnSwitch} /> */}
+          <MenuBtn initial={true} on={showSidebar} onTap={()=>setShowSidebar(!showSidebar)} />
           <AppSwitch initial={0} onSwitch={handleCatagorySwitch} />
           <CreateBtn onTap={handleTapCreate}>写文章</CreateBtn>
         </Header>
@@ -81,8 +83,7 @@ const App = props => {
                       date={item.createdTime}
                       timeBefore='3小时前'
                       active={i === activeIndex}
-                      index={i}
-                      onTap={(index) => handleClickItem(item.contentId,index)}
+                      onTap={() => handleClickItem(item.contentId,i)}
                       onClickDelBtn={()=> deleteByIndex(i)}
                     />
                   )
@@ -128,4 +129,4 @@ const StyledApp = ({ theme, children }) => {
   )
 }
 
-export default App
+export default memo(App)

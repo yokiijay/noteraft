@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import useThemeModel from '../../models/useThemeModel'
@@ -6,7 +6,7 @@ import { ellipsis } from 'polished'
 import { motion } from 'framer-motion'
 import SidebarDelBtn from './SidebarDelBtn'
 
-const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, index, onClickDelBtn }) => {
+const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, onClickDelBtn }) => {
   const { theme } = useThemeModel()
   const [showDel, setShowDel] = useState(false)
 
@@ -16,11 +16,6 @@ const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, inde
 
   const handleHoverEnd = () => {
     setShowDel(false)
-  }
-
-  const handleTap = ()=>{
-    if(index===0) onTap(0)
-    if(index) onTap(index)
   }
 
   // 挂载动画
@@ -48,7 +43,7 @@ const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, inde
       initial='initial'
       animate='animate'
       exit='exit'
-      onTap={handleTap}
+      onTap={onTap}
       onHoverStart={handleHoverStart}
       onHoverEnd={handleHoverEnd}
       css={css`
@@ -121,4 +116,4 @@ const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, inde
   )
 }
 
-export default SideListItem
+export default memo(SideListItem)
