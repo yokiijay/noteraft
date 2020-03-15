@@ -47,7 +47,7 @@ const Sidebar = ({ show, children }) => {
       variants={variants}
       animate={show ? 'show' : 'hide'}
     >
-      <AnimatePresence>{children}</AnimatePresence>
+      <AnimatePresence initial={false}>{children}</AnimatePresence>
     </motion.div>
   )
 }
