@@ -1,11 +1,17 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 
-const Test = () => {
+const Test = ({getOn, effect}) => {
+  const [trigger, setTrigger] = useState(0)
+  effect(()=>{
+    setTrigger(trigger+1)
+    console.log( getOn() )
+  })
+
   return(
     <div>
-      test
+      {getOn()?'on':'off'}
     </div>
   )
 }
 
-export default memo(Test)
+export default Test

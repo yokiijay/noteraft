@@ -15,7 +15,6 @@ import useDataModel from './models/useDataModel'
 import { useHistory, Route, Switch } from 'react-router-dom'
 import NoPage from './components/NotFound/NoPage'
 import useShortKey from './lib/useShortKey'
-import useRefState from './lib/useRefState'
 
 /* -------------------------- App -------------------------- */
 
@@ -62,6 +61,7 @@ const App = props => {
 
   return (
     <StyledApp theme={theme}>
+      <AppSwitch />
       <Container>
 
         <Header>

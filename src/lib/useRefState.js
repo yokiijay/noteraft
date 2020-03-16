@@ -1,21 +1,36 @@
-import { useRef } from "react"
+import { useRef } from 'react'
 
+class RefState {
+  constructor(initState){
+    this.state = useRef().current = initState
+  }
 
-// this state won't re-fresh current Component
+  getState(){
+    return this.state
+  }
+
+  setState(newState){
+    if(typeof newState === 'function'){
+      newState && newState(this.state)
+    }else {
+      this.state = newState
+    }
+
+    this.effect && this.effect()
+  }
+
+  useRefEffect(cb){
+    this.effect = cb
+  }
+}
+
 function useRefState(initState){
-  let state = useRef.current = initState
-  let effect
+  const s = new RefState(initState)
+  const getState = s.getState.bind(s)
+  const setState = s.setState.bind(s)
+  const useRefEffect = s.useRefEffect.bind(s)
 
-  const setState=(newState)=>{
-    state = newState
-    effect&&effect()
-  }
-
-  function useRefEffect(cb){
-    effect=cb
-  }
-
-  return [state, setState, useRefEffect]
+  return [getState, setState, useRefEffect]
 }
 
 export default useRefState
