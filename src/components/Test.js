@@ -1,15 +1,15 @@
 import React, { memo, useState } from 'react'
 
-const Test = ({getOn, effect}) => {
+const Test = ({on, effect}) => {
   const [trigger, setTrigger] = useState(0)
   effect(()=>{
     setTrigger(trigger+1)
-    console.log( getOn() )
+    console.log( on )
   })
 
   return(
     <div>
-      {getOn()?'on':'off'}
+      {on?'on':'off'}
     </div>
   )
 }

@@ -15,6 +15,7 @@ const Header = ({ children }) => {
         display: flex;
         align-items: center;
         overflow: hidden;
+        z-index: 999;
       `}
     >
       {children}

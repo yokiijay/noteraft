@@ -5,30 +5,19 @@ import { faBook, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
 
-const AppSwitch = ({initial=0, onSwitch}) => {
+const AppSwitch = ({initial=0, onSwitch, activeIndex=0, selfBehave=false}) => {
   const { theme } = useThemeModel()
   const [active, setActive] = useState(initial)
 
-   // 给组件暴露switch事件
+  // 接受activeIndex来改变自身的active
   useEffect(()=>{
-    onSwitch && onSwitch(active)
-  }, [active, onSwitch])
+    setActive(activeIndex)
+  }, [activeIndex])
 
-  useEffect(() => {
-    window.addEventListener('keydown', ev => {
-      if (ev.key === 'ArrowLeft') setActive(prevActive => (prevActive + 1) % 2)
-      if (ev.key === 'ArrowRight') setActive(prevActive => (prevActive + 1) % 2)
-      return
-    })
-    return () =>
-      window.removeEventListener('keydown', ev => {
-        if (ev.key === 'ArrowLeft')
-          setActive(prevActive => (prevActive + 1) % 2)
-        if (ev.key === 'ArrowRight')
-          setActive(prevActive => (prevActive + 1) % 2)
-        return
-      })
-  }, [])
+  const handleClick = index =>{
+    onSwitch && onSwitch(index)
+    selfBehave && setActive(index)
+  }
 
   return (
     <StyledAppSwitch theme={theme}>
@@ -40,13 +29,13 @@ const AppSwitch = ({initial=0, onSwitch}) => {
         }}
       />
       <div
-        onClick={() => setActive(0)}
+        onClick={() => handleClick(0)}
         className={`item note ${active === 0 ? 'active' : null}`}
       >
         {active === 0 ? '笔记' : <FontAwesomeIcon icon={faBook} />}
       </div>
       <div
-        onClick={() => setActive(1)}
+        onClick={() => handleClick(1)}
         className={`item todo ${active === 1 ? 'active' : null}`}
       >
         {active === 1 ? '待办' : <FontAwesomeIcon icon={faCalendarCheck} />}

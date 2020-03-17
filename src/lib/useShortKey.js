@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 const initState = false
 
 function useShortKey(modifier, key, cb) {
-  const [onoff, setOnoff] = useState(initState)
+    const [onoff, setOnoff] = useState(initState)
 
   const toggle = () => {
     setOnoff(onoff=>!onoff)
@@ -11,9 +11,10 @@ function useShortKey(modifier, key, cb) {
 
   //  modifier: cmd-Meta option-Alt control-control
   const handleKeydown = ev => {
+    
     const { metaKey, ctrlKey, shiftKey, altKey } = ev
     const keyname = ev.key
-
+    
     switch (modifier) {
       case 'cmd':
       case 'command':
@@ -46,13 +47,17 @@ function useShortKey(modifier, key, cb) {
           cb&&cb(onoff)
         }
         break
-      default: return
+      default: break
     }
 
     if(!modifier&&key&&keyname===key){
       ev.preventDefault()
       toggle()
       cb&&cb(onoff)
+    }
+    if(!modifier&&!key){
+      ev.preventDefault()
+      cb&&cb(ev.key)
     }
   }
 

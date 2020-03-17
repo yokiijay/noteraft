@@ -96,6 +96,15 @@ const SideListItem = ({ title, descrition, date, timeBefore, active, onTap, onCl
           white-space: nowrap;
         }
       `}
+      positionTransition={{
+        type: 'spring',
+        stiffness: 300,
+        damping: 25,
+      }}
+      transition={{
+        ease: 'easeOut',
+        duration: .2,
+      }}
     >
       <h4>{title}</h4>
       <p>{descrition}</p>

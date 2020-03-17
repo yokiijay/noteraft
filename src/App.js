@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, memo } from 'react'
+import { useState, memo } from 'react'
 /** @jsx jsx */
 import { jsx, css, Global } from '@emotion/core'
 import useThemeModel from './models/useThemeModel'
@@ -10,11 +10,11 @@ import AppSwitch from './components/Header/AppSwitch'
 import CreateBtn from './components/Header/CreateBtn'
 import MainBody from './components/MainBody'
 import Sidebar from './components/Sidebar/Sidebar'
-import SidebarItem from './components/Sidebar/SidebarItem'
-import useDataModel from './models/useDataModel'
-import { useHistory, Route, Switch } from 'react-router-dom'
+import { useHistory, Route, Switch, Redirect } from 'react-router-dom'
 import NoPage from './components/NotFound/NoPage'
 import useShortKey from './lib/useShortKey'
+import Note from './components/Content/Note'
+import NoContent from './components/NotFound/NoContent'
 
 /* -------------------------- App -------------------------- */
 
@@ -22,12 +22,8 @@ const App = props => {
   const { theme } = useThemeModel()
   const history = useHistory()
 
-  // 文章Data
-  const { data, deleteByIndex } = useDataModel()
-
   // 侧栏
   const [showSidebar, setShowSidebar] = useState(true)
-  const [activeIndex, setActiveIndex] = useState(0)
 
   // 侧栏快捷键
   useShortKey('cmd', 'b', ()=>{
@@ -37,65 +33,66 @@ const App = props => {
   // app catagory 切换
   const [catagory, setCatagory] = useState(0)
 
-  const handleCatagorySwitch = useCallback(
-    active => {
-      setCatagory(active)
-    },
-    [setCatagory]
-  )
-
-  const catagoryParam = useMemo(() => (catagory === 0 ? 'note' : 'todo'), [
-    catagory
-  ])
-
-  // 侧栏导航
-  const handleClickItem = (contentId, index) => {
-    history.push(`/${catagoryParam}/${contentId}`) // 切换导航
-    setActiveIndex(index) // 激活index对应侧栏item
+  const handleCatagorySwitch = index => {
+    history.push(`/${!index?'note':'todo'}`)
+    setCatagory(index)
   }
 
+  // app catagory 快捷键切换
+  useShortKey('', 'ArrowLeft', ()=>{
+    history.push(catagory?'/note':'/todo')
+    setCatagory((catagory+1)%2)
+  })
+  useShortKey('', 'ArrowRight', ()=>{
+    history.push(catagory?'/note':'/todo')
+    setCatagory((catagory+1)%2)
+  })
+  
   // 创建文章
   const handleTapCreate = ()=>{
     // do something to create a note
   }
 
+
   return (
     <StyledApp theme={theme}>
-      <AppSwitch />
       <Container>
 
         <Header>
-          {/* <MenuBtn initial={true} onSwitch={handleMenuBtnSwitch} /> */}
           <MenuBtn initial={true} on={showSidebar} onTap={()=>setShowSidebar(!showSidebar)} />
-          <AppSwitch initial={0} onSwitch={handleCatagorySwitch} />
+          <AppSwitch activeIndex={catagory} onSwitch={handleCatagorySwitch} />
           <CreateBtn onTap={handleTapCreate}>写文章</CreateBtn>
         </Header>
 
+        <Route exact path='/' render={()=><Redirect to='/note' />} />
         <Switch>
+
           <Route path='/note'>
             <MainBody>
-              <Sidebar show={showSidebar}>
-                {data.map((item,i) => {
-                  return item.catagory==='note' && (
-                    <SidebarItem
-                      key={item.id}
-                      title={item.content.title}
-                      descrition={item.content.body[0]['content']}
-                      date={item.createdTime}
-                      timeBefore='3小时前'
-                      active={i === activeIndex}
-                      onTap={() => handleClickItem(item.contentId,i)}
-                      onClickDelBtn={()=> deleteByIndex(i)}
-                    />
-                  )
-                })}
-              </Sidebar>
-              {/* <Route path='/note/:Contentid'>
-                <Content></Content>
-              </Route> */}
+
+                <Route exact path='/note'>
+                  <Sidebar catagory='note' show={showSidebar} />
+                  <NoContent />
+                </Route>
+
+                <Switch>
+                  <Route path='/note/nocontent'>
+                    <Sidebar catagory='note' show={showSidebar} />
+                    <NoContent />
+                  </Route>
+                  <Route path='/note/:contentId'>
+                    <Sidebar catagory='note' show={showSidebar} />
+                    <Note></Note>
+                  </Route>
+                </Switch>
+
             </MainBody>
           </Route>
-          <Route component={NoPage} />
+          
+          <Route>
+            <NoPage redirectTo={!catagory?'note':'todo'} />
+          </Route>
+
         </Switch>
 
       </Container>
