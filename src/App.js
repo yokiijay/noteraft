@@ -39,14 +39,14 @@ const App = props => {
   }
 
   // app catagory 快捷键切换
-  useShortKey('', 'ArrowLeft', ()=>{
-    history.push(catagory?'/note':'/todo')
-    setCatagory((catagory+1)%2)
-  })
-  useShortKey('', 'ArrowRight', ()=>{
-    history.push(catagory?'/note':'/todo')
-    setCatagory((catagory+1)%2)
-  })
+  // useShortKey('cmd', 'ArrowLeft', ()=>{
+  //   history.push(catagory?'/note':'/todo')
+  //   setCatagory((catagory+1)%2)
+  // })
+  // useShortKey('cmd', 'ArrowRight', ()=>{
+  //   history.push(catagory?'/note':'/todo')
+  //   setCatagory((catagory+1)%2)
+  // })
   
   // 创建文章
   const handleTapCreate = ()=>{

@@ -42,10 +42,10 @@ const Sidebar = ({ show, catagory }) => {
 
   const currentContentId = params.contentId
 
-  useShortKey('','Backspace',(key)=>{
-    deleteByContentId(currentContentId)
-    history.push('nocontent')
-  })
+  // useShortKey('cmd','Backspace',(key)=>{
+  //   deleteByContentId(currentContentId)
+  //   history.push('nocontent')
+  // })
 
   return (
     <motion.div
