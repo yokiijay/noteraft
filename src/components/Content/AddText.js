@@ -6,8 +6,8 @@ import useThemeModel from '../../models/useThemeModel'
 import { motion } from 'framer-motion'
 import { useState, useRef } from 'react'
 
-const AddText = ({ ...props }) => {
-  const [showList, setShowList] = useState(true)
+const AddText = ({ onClickTS, ...props }) => {
+  const [showList, setShowList] = useState(false)
   const addListRef = useRef()
 
   const handleClickAddBtn = () => {
@@ -26,7 +26,7 @@ const AddText = ({ ...props }) => {
       {...props}
     >
       {showList ? (
-        <AddList addListRef={addListRef} onClickBack={handleClickBack} />
+        <AddList addListRef={addListRef} onClickBack={handleClickBack} onClickTS={onClickTS} />
       ) : (
         <AddBtn onClick={handleClickAddBtn} />
       )}
@@ -40,8 +40,8 @@ const AddBtn = ({ onClick }) => {
   return (
     <motion.div
       css={css`
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         background: ${theme.button.background};
         color: white;
         display: flex;
@@ -50,8 +50,9 @@ const AddBtn = ({ onClick }) => {
         border-radius: 50%;
         cursor: pointer;
         padding: 10px;
+        opacity: .4;
       `}
-      whileHover={{ scale: 1.1 }}
+      whileHover={{ scale: 1.1, opacity: 1 }}
       whileTap={{ scale: 0.9 }}
       onClick={onClick}
     >
@@ -60,10 +61,12 @@ const AddBtn = ({ onClick }) => {
   )
 }
 
-const AddList = ({ addListRef, onClickBack }) => {
+const AddList = ({ addListRef, onClickBack, onClickTS }) => {
   const { theme } = useThemeModel()
 
-  const handleClickTS = behave => {}
+  const handleClickTS = behave => {
+    onClickTS(behave)
+  }
 
   return (
     <div>

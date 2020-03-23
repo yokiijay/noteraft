@@ -2,34 +2,50 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import useThemeModel from '../../models/useThemeModel'
-import useShortKey from '../../lib/useShortKey'
 import AddText from './AddText'
+import { useState } from 'react'
 
 const Note = () => {
   // const params = useParams()
   const { theme } = useThemeModel()
 
-  const handleTextStyle = headline =>{
-    switch (headline) {
-      case 1:
-        document.execCommand('insertHTML', null, `<h1></h1>`)
-        break
-      case 2:
-        document.execCommand('insertHTML', null, `<h2></h2>`)
-        break
-      case 3:
-        document.execCommand('insertHTML', null, `<h3></h3>`)
-        break
-    
-      default:
-        break
+  // 控制显示+按钮
+  const [displayAdd, setDisplayAdd] = useState(false)
+  // 控制+按钮位置
+  const [pos, setPos] = useState({x:0,y:0})
+
+  // 点击TS时处理
+  const handleClickTS = behave => {
+    console.log(behave)
+  }
+
+  // 光标移动时处理
+  const handleSelect = () => {
+    const selection = getSelection()
+    const { anchorNode, focusNode } = selection
+
+    // anchor和focus必须是同一个元素
+    if (anchorNode === focusNode) {
+      anchorNode.length ? setDisplayAdd(false) : setDisplayAdd(true)
     }
+
+    // 如果当前元素是block则设置+按钮位置
+    !anchorNode.length && setPos({
+      x: anchorNode.offsetLeft - 30,
+      y: anchorNode.offsetTop,
+    })
+  }
+
+  // 输入时处理
+  const handleInput = (ev)=>{
+    
   }
 
   return (
     <div
       spellCheck='false'
       css={css`
+        position: relative;
         padding: 20px 40px;
         width: 800px;
         margin: 0 auto;
@@ -49,7 +65,17 @@ const Note = () => {
         }
       `}
     >
-      <AddText />
+      <AddText
+        css={css`
+          /* display: ${displayAdd ? 'block' : 'none'}; */
+          opacity: ${displayAdd ? 1 : 0};
+          transition: opacity .2s;
+          pointer-events: ${displayAdd ? 'initial' : 'none'};
+          top: ${pos.y}px;
+          left: ${pos.x}px;
+        `}
+        onClickTS={handleClickTS}
+      />
       <h1 contentEditable suppressContentEditableWarning className='title'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit
       </h1>
@@ -63,11 +89,15 @@ const Note = () => {
           outline: none;
           margin-top: 20px;
 
-          h1,h2,h3 {
+          h1,
+          h2,
+          h3 {
             min-height: 30px;
             min-width: 30px;
           }
         `}
+        onInput={handleInput}
+        onSelect={handleSelect}
       >
         dsada
       </div>
