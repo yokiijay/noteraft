@@ -14,7 +14,12 @@ const AddText = ({ onClickTS, ...props }) => {
     setShowList(true)
   }
 
-  const handleClickBack = ()=>{
+  const handleClickBack = () => {
+    setShowList(false)
+  }
+
+  const handleClickTS = (behave) => {
+    onClickTS(behave)
     setShowList(false)
   }
 
@@ -26,7 +31,11 @@ const AddText = ({ onClickTS, ...props }) => {
       {...props}
     >
       {showList ? (
-        <AddList addListRef={addListRef} onClickBack={handleClickBack} onClickTS={onClickTS} />
+        <AddList
+          addListRef={addListRef}
+          onClickBack={handleClickBack}
+          onClickTS={handleClickTS}
+        />
       ) : (
         <AddBtn onClick={handleClickAddBtn} />
       )}
@@ -42,19 +51,20 @@ const AddBtn = ({ onClick }) => {
       css={css`
         width: 22px;
         height: 22px;
-        background: ${theme.button.background};
-        color: white;
+        background: ${theme.background.base};
+        box-shadow: 0 2px 4px ${theme.color.shadow};
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
         cursor: pointer;
         padding: 10px;
-        opacity: .4;
+        opacity: 0.4;
       `}
       whileHover={{ scale: 1.1, opacity: 1 }}
       whileTap={{ scale: 0.9 }}
       onClick={onClick}
+      onMouseDown={ev=>ev.preventDefault()}
     >
       <FontAwesomeIcon size='xs' icon={faPlus} />
     </motion.div>
